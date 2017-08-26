@@ -28,6 +28,7 @@
   "homepage": "https://github.com/paulsonnentag/swip#readme",
   "dependencies": {
     "bufferstream": "^0.6.2",
+    "canonical-json": "0.0.4",
     "immutability-helper": "^2.0.0",
     "lodash": "^4.13.1",
     "redux": "^3.5.2",

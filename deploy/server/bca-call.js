@@ -1,7 +1,7 @@
 const got = require('got');
 const request = require('request');
 const Buffer = require('Buffer');
-
+const canonicalize = require('canon');
 const crypto = require('crypto');
 const companyCode = 88801;
 const Oauth = require('client-oauth2');
@@ -46,7 +46,7 @@ function createHeader (data, body){
   let method = 'post'.toUpperCase();
   let url = encodeURI('/ewallet/customers');
   let accessToken = data.accessToken;
-  let bd = crypto.createHash('SHA-256', body);
+  let bd = crypto.createHash('SHA-256').update(canonicalize.stringify(body), 'UTF-8').digest('hex');
   bd = bd.toLowerCase();
 
   let dt = new Date();
@@ -54,7 +54,7 @@ function createHeader (data, body){
 
   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
 
-  let hash = crypto.createHmac('SHA_256', aS, str);
+  let hash = crypto.createHmac('SHA_256', aS).update(str).digest('hex');
 
   var header = {
     'Authorization' : 'Bearer '+accessToken,
@@ -75,6 +75,7 @@ function registerUser (req, res) {
   body.EmailAddress = req.email_address;
   body.IDNumber = req.id_number;
   body.CompanyCode = companyCode;
+
   let header = {};
 
   getAccessToken(function(data){

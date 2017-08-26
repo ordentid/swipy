@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "Buffer": "0.0.0",
+    "canon": "^0.4.1",
+    "canonical-json": "0.0.4",
     "client-oauth2": "^4.1.0",
     "crypto": "^1.0.1",
     "express": "^4.15.4",
