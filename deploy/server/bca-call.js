@@ -21,7 +21,8 @@ function getAccessToken () {
     Authorization: 'Basic ' + new Buffer(cID + ':' + cS).toString('base64'),
     'Content-Type': 'application/x-www-form-urlencoded'
   };
-  let body = { grant_type: 'client_credentials' };
+
+  let body = JSON.stringify({ grant_type: 'client_credentials' });
   let options = {
     method: 'POST',
     url: 'https://api.finhacks.id/api/oauth/token',
