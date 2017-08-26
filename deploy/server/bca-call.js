@@ -43,7 +43,7 @@ function getAccessToken (handleData) {
     });
 }
 
-function createSignature (method, url, data, accessToken, timestamp){
+function createSignature (method, url, data, accessToken, timestamp) {
   let m = method.toUpperCase();
   let u = encodeURI(url);
   let a = accessToken;
@@ -59,7 +59,7 @@ function createSignature (method, url, data, accessToken, timestamp){
   return signature;
 }
 
-function createHeader(method, url, data, accessToken, timestamp){
+function createHeader (method, url, data, accessToken, timestamp) {
   let t  = timestamp + '+07:00';
   let signature = createSignature(method, url, data, accessToken, t);
   let header = {
@@ -114,7 +114,6 @@ function registerUser (req, res) {
   bd.IDNumber = req.body.id_number;
   bd.CompanyCode = companyCode;
   bd.CustomerNumber = "1111111112";
-  let header = {};
 
   getAccessToken(function(data){
     let method = 'POST';
@@ -129,6 +128,36 @@ function registerUser (req, res) {
       headers: header,
       method: method,
       body: bd,
+      json: true,
+    };
+
+    rp(options)
+      .then(function (response) {
+        res.send(response);
+      })
+      .catch(function (error) {
+        res.send(error);
+      });
+  });
+}
+
+function getUser (req, res) {
+  let bd = {};
+  bd.CompanyCode = 88859;
+  bd.PrimaryID = req.params.id;
+  
+  getAccessToken(function (data) {
+    let method = 'GET';
+    let host = 'https://api.finhacks.id';
+    let url = '/ewallet/customers/' + bd.CompanyCode + '/' + bd.PrimaryID;
+    let access_token = JSON.parse(data).access_token;
+    let timestamp = new Date().toISOString();
+    let header = createHeader(method, url, bd, access_token, timestamp);
+
+    let options = {
+      url: host + url,
+      headers: header,
+      method: method,
       json: true,
     };
 
@@ -175,4 +204,5 @@ function registerUser (req, res) {
 module.exports = {
   getAccessToken,
   registerUser,
+  getUser,
 };
