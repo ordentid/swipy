@@ -43,42 +43,65 @@ function getAccessToken (handleData) {
     });
 }
 
-
-function createHeader (data, body){
-  let method = 'post'.toUpperCase();
-  console.log(method);
-  let url = encodeURI('/ewallet/customers');
-  console.log(url);
-  let accessToken = data.access_token;
-  console.log('access_token : '+accessToken);
+function createSignature (method, url, data, accessToken, timestamp){
+  let m = method.toUpperCase();
+  let u = encodeURI(url);
+  let a = accessToken;
   let bd = "";
-  if(Object.keys(body).length != 0 && body.constructor === Object){
-    bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
-    console.log('body-canon :'+bd);
-    bd = crypto.SHA256(bd).toString();
-    console.log('body-sha256:'+bd);
+  if (Object.keys(data).length != 0 && data.constructor === Object) {
+    bd = JSON.stringify(data).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
   }
-  bd.toLowerCase();
+  bd = crypto.SHA256(bd).toString().toLowerCase();
   
-  let dt = new Date();
-  dt = dt.toISOString().slice(0, -1);
-  console.log(dt);
-  let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
-  console.log('combine :'+str);
-  let hash = crypto.HmacSHA256(str, aS).toString();
-  console.log('signature :'+hash);
-  var header = {
-    'Authorization' : 'Bearer '+accessToken,
-    'X-BCA-Key' : aK,
-    'X-BCA-Signature' : hash,
-    'X-BCA-Timestamp' : dt
-  }
-  console.log(header);
+  let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + dt).toString();
+}
+
+function createHeader(method, url, data, accessToken, timestamp){
+  let t  = timestamp.slice(0, -1) + '+07:00';
+  let signature = this.createSignature(method, url, data, accessToken, timestamp);
+  let header = {
+    'Authorization': 'Bearer ' + accessToken,
+    'X-BCA-Key': aK,
+    'X-BCA-Signature': signature,
+    'X-BCA-Timestamp': t,
+  };
   return header;
 }
 
-function registerUser (req, res) {
+// function createHeader (data, body){
+  //   let method = 'post'.toUpperCase();
+  //   console.log(method);
+  //   let url = encodeURI('/ewallet/customers');
+  //   console.log(url);
+  //   let accessToken = data.access_token;
+  //   console.log('access_token : '+accessToken);
+  //   let bd = "";
+  //   if(Object.keys(body).length != 0 && body.constructor === Object){
+  //     bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
+  //     console.log('body-canon :'+bd);
+  //     bd = crypto.SHA256(bd).toString();
+  //     console.log('body-sha256:'+bd);
+  //   }
+  //   bd.toLowerCase();
+    
+  //   let dt = new Date();
+  //   dt = dt.toISOString().slice(0, -1);
+  //   console.log(dt);
+  //   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
+  //   console.log('combine :'+str);
+  //   let hash = crypto.HmacSHA256(str, aS).toString();
+  //   console.log('signature :'+hash);
+  //   var header = {
+  //     'Authorization' : 'Bearer '+accessToken,
+  //     'X-BCA-Key' : aK,
+  //     'X-BCA-Signature' : hash,
+  //     'X-BCA-Timestamp' : dt
+  //   }
+  //   console.log(header);
+  //   return header;
+// }
 
+function registerUser (req, res) {
   let bd = {};
   bd.CustomerName = req.body.customer_name;
   bd.DateOfBirth = req.body.birth_date;
@@ -91,68 +114,62 @@ function registerUser (req, res) {
   let header = {};
 
   getAccessToken(function(data){
-    let header = createHeader(JSON.parse(data), bd);
+    let method = 'POST';
+    let host = 'https://api.finhacks.id';
+    let url = '/ewallet/customers';
+    let access_token = JSON.parse(data).access_token;
+    let timestamp = new Date().toISOString();
+    let header = createHeader(method, url, bd, access_token, timestamp);
+
     let options = {
-      url: 'https://api.finhacks.id/ewallet/customers',
+      url: host + url,
       headers: header,
-      method: 'POST',
+      method: method,
       body: bd,
-      json: 'true',
+      json: true,
     };
 
     rp(options)
-      .then(function(response) {
+      .then(function (response) {
         res.send(response);
       })
-      .catch(function(error){
+      .catch(function (error) {
         res.send(error);
       });
-
-    // request.post(options)
-    //   .on('response',function(response){
-    //     response.on('data', function(data){
-    //       res.send(data);
-    //     })
-    //   })
-    //   .on('error', function(error){
-    //     res.send(error);
-    //   });
   });
 }
 
-function solveSignature(res){
-  let method = 'POST'.toUpperCase();
-  let url = encodeURI('/banking/corporates/transfers');
-  let access_token = 'lIWOt2p29grUo59bedBUrBY3pnzqQX544LzYPohcGHOuwn8AUEdUKS';
-  let body = 
-  { 
-      "CorporateID" : "BCAAPI2016",
-      "SourceAccountNumber" : "0201245680",
-      "TransactionID" : "00000001",
-      "TransactionDate" : "2016-01-30",
-      "ReferenceID" : "12345/PO/2016",
-      "CurrencyCode" : "IDR",
-      "Amount" : "100000.00",
-      "BeneficiaryAccountNumber" : "0201245681",
-      "Remark1" : "Transfer Test",
-      "Remark2" : "Online Transfer"
-  };
-  let dt = '2016-02-03T10:00:00.000+07:00';
-  let apiSecret = '22a2d25e-765d-41e1-8d29-da68dcb5698b';
-
-  let bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
-
-  bd = crypto.SHA256(bd).toString();
-
-  let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
-
-  let hash = crypto.HmacSHA256(str, apiSecret).toString();
-
-  res.send(hash);
-}
+// function solveSignature(res){
+  //   let method = 'POST'.toUpperCase();
+  //   let url = encodeURI('/banking/corporates/transfers');
+  //   console.log(url);
+  //   let access_token = 'lIWOt2p29grUo59bedBUrBY3pnzqQX544LzYPohcGHOuwn8AUEdUKS';
+  //   let body = 
+  //   { 
+  //       "CorporateID" : "BCAAPI2016",
+  //       "SourceAccountNumber" : "0201245680",
+  //       "TransactionID" : "00000001",
+  //       "TransactionDate" : "2016-01-30",
+  //       "ReferenceID" : "12345/PO/2016",
+  //       "CurrencyCode" : "IDR",
+  //       "Amount" : "100000.00",
+  //       "BeneficiaryAccountNumber" : "0201245681",
+  //       "Remark1" : "Transfer Test",
+  //       "Remark2" : "Online Transfer"
+  //   };
+  //   let dt = '2016-02-03T10:00:00.000+07:00';
+  //   let apiSecret = '22a2d25e-765d-41e1-8d29-da68dcb5698b';
+  //   let bd = JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
+  //   console.log(JSON.stringify(bd));
+  //   bd = crypto.SHA256(bd).toString();
+  //   console.log(bd);
+  //   let str = method + ':' + url + ':' + access_token + ':' + bd + ':' + dt;
+  //   console.log(str);
+  //   let hash = crypto.HmacSHA256(str, apiSecret).toString();
+  //   console.log(hash);
+// }
 
 module.exports = {
   getAccessToken,
   registerUser,
-  solveSignature,
 };

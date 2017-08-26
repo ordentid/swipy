@@ -17,7 +17,7 @@ function ioPage (req, res) {
 }
 
 function registerService (req, res) {
-  console.log(res); 
+  bca.registerUser(req, res);
 }
 
 function queueService (req, res) {
@@ -25,17 +25,21 @@ function queueService (req, res) {
 }
 
 function tokenPage (req, res) {
-  bca.registerUser(req, res);
+  bca.getAccessToken(function (data) {
+    res.send(data);
+  });
 }
+
 app.use(parser.urlencoded({ extended: true }));
+
 app.get('/', indexPage);
 app.get('/io', ioPage);
 app.post('/api/register', registerService);
 app.post('/api/queue', queueService);
 app.post('/token', tokenPage);
-app.get('/test-signature', function(req, res){
-  bca.solveSignature(res);
-});
+// app.get('/test-signature', function(req, res){
+//   bca.solveSignature(res);
+// });
 // - page-register
 // - page-menu (pilih tipe transaksi)
 // - page-gesture
