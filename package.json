@@ -13,8 +13,8 @@
     "golf:dev": "nodemon examples/golf/server/index.js",
     "contact": "node examples/contact-share/server/index.js",
     "contact:dev": "nodemon examples/contact-share/server/index.js",
-    "deploy" : "node deploy/server/index.js",
-    "deploy:dev" : "nodemon deploy/server/index.js"
+    "deploy": "node deploy/server/index.js",
+    "deploy:dev": "nodemon deploy/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/paulsonnentag/swip#readme",
   "dependencies": {
+    "bufferstream": "^0.6.2",
     "immutability-helper": "^2.0.0",
     "lodash": "^4.13.1",
     "redux": "^3.5.2",

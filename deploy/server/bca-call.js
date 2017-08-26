@@ -1,6 +1,7 @@
 const got = require('got');
 const request = require('request');
 const Buffer = require('Buffer');
+
 const crypto = require('crypto');
 const companyCode = 88801;
 const Oauth = require('client-oauth2');
@@ -22,7 +23,7 @@ function getAccessToken () {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
 
-  let body = JSON.stringify({ grant_type: 'client_credentials' });
+  let body = new Buffer({ grant_type: 'client_credentials' });
   let options = {
     method: 'POST',
     url: 'https://api.finhacks.id/api/oauth/token',
