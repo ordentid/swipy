@@ -28,6 +28,10 @@ function updateUserService (req, res) {
   bca.updateUser(req, res);
 }
 
+function postTopUp (req, res) {
+  bca.postTopUp(req, res);
+}
+
 function queueService (req, res) {
   console.log(res);
 }
@@ -46,6 +50,7 @@ app.post('/api/register', registerService);
 app.get('/api/users/:id', getUserService);
 app.post('/api/users/:id', updateUserService);
 app.post('/api/queue', queueService);
+app.post('/api/topup/:id', postTopUp);
 app.post('/token', tokenPage);
 // app.get('/test-signature', function(req, res){
 //   bca.solveSignature(res);

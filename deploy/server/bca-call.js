@@ -203,39 +203,44 @@ function getUser (req, res) {
   });
 }
 
-// function solveSignature(res){
-  //   let method = 'POST'.toUpperCase();
-  //   let url = encodeURI('/banking/corporates/transfers');
-  //   console.log(url);
-  //   let access_token = 'lIWOt2p29grUo59bedBUrBY3pnzqQX544LzYPohcGHOuwn8AUEdUKS';
-  //   let body = 
-  //   { 
-  //       "CorporateID" : "BCAAPI2016",
-  //       "SourceAccountNumber" : "0201245680",
-  //       "TransactionID" : "00000001",
-  //       "TransactionDate" : "2016-01-30",
-  //       "ReferenceID" : "12345/PO/2016",
-  //       "CurrencyCode" : "IDR",
-  //       "Amount" : "100000.00",
-  //       "BeneficiaryAccountNumber" : "0201245681",
-  //       "Remark1" : "Transfer Test",
-  //       "Remark2" : "Online Transfer"
-  //   };
-  //   let dt = '2016-02-03T10:00:00.000+07:00';
-  //   let apiSecret = '22a2d25e-765d-41e1-8d29-da68dcb5698b';
-  //   let bd = JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
-  //   console.log(JSON.stringify(bd));
-  //   bd = crypto.SHA256(bd).toString();
-  //   console.log(bd);
-  //   let str = method + ':' + url + ':' + access_token + ':' + bd + ':' + dt;
-  //   console.log(str);
-  //   let hash = crypto.HmacSHA256(str, apiSecret).toString();
-  //   console.log(hash);
-// }
+function postTopUp (req, res) {
+  let bd = {};
+  bd.CompanyCode = companyCode;
+  bd.PrimaryID = res.params.id;
+  bd.RequestDate = new Date().toISOString() + '+07:00';
+  bd.TransactionID = 'ORD-' + bd.PrimaryID + '-' + bd.RequestDate;
+  bd.Amount = req.body.Amount;
+  bd.CurrencyCode = 'IDR';
+
+  getAccessToken(function (data) {
+    let method = 'POST';
+    let host = 'https://api.finhacks.id';
+    let url = '/ewallet/topup';
+    let access_token = JSON.parse(data).access_token;
+    let timestamp = new Date().toISOString();
+    let header = createHeader(method, url, bd, access_token, timestamp);
+
+    let options = {
+      url: host + url,
+      headers: header,
+      method: method,
+      json: true,
+    };
+
+    rp(options)
+      .then(function (response) {
+        res.send(response);
+      })
+      .catch(function (error) {
+        res.send(error);
+      });
+  });
+}
 
 module.exports = {
   getAccessToken,
   registerUser,
   getUser,
   updateUser,
+  postTopUp,
 };
