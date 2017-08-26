@@ -47,8 +47,7 @@ function createHeader (data, body){
   let url = encodeURI('/ewallet/customers');
   let accessToken = data.accessToken;
   let bd = crypto.SHA256(canonicalize.stringify(body));
-  bd = bd.toLowerCase();
-
+  console.log(bd);
   let dt = new Date();
   dt = dt.toISOString();
 
