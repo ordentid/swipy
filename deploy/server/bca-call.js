@@ -31,7 +31,7 @@ function getAccessToken () {
   };
   request.post(options).form(body)
     .on('response', function(response) {
-      console.log(response);
+      console.log(response.body);
     })
     .on('error', function(error) {
       console.log(error);
