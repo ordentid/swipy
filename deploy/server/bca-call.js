@@ -50,8 +50,9 @@ function createHeader (data, body){
   let accessToken = data.access_token;
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
-    bd = JSON.stringify(body);
-    bd = crypto.SHA256(bd).toString()l
+    bd = JSON.parse(JSON.stringify(body));
+    console.log(bd)
+    bd = crypto.SHA256(bd).toString();
   }
   bd.toLowerCase();
   console.log(bd)
@@ -75,12 +76,12 @@ function createHeader (data, body){
 function registerUser (req, res) {
 
   let body = {};
-  body.CustomerName = req.customer_name;
-  body.DateOfBirth = req.birth_date;
-  body.PrimaryID = req.primary_id;
-  body.MobileNumber = req.mobile_number;
-  body.EmailAddress = req.email_address;
-  body.IDNumber = req.id_number;
+  body.CustomerName = req.body.customer_name;
+  body.DateOfBirth = req.body.birth_date;
+  body.PrimaryID = req.body.primary_id;
+  body.MobileNumber = req.body.mobile_number;
+  body.EmailAddress = req.body.email_address;
+  body.IDNumber = req.body.id_number;
   body.CompanyCode = companyCode;
 
   let header = {};
