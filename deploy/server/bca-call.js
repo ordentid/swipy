@@ -54,6 +54,7 @@ function createSignature (method, url, data, accessToken, timestamp){
   bd = crypto.SHA256(bd).toString().toLowerCase();
   
   let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + timestamp, aS).toString();
+  return signature;
 }
 
 function createHeader(method, url, data, accessToken, timestamp){
