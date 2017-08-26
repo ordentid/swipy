@@ -1,6 +1,7 @@
 const got = require('got');
 
 const request = require('request');
+const rp = require('request-promise');
 const Buffer = require('Buffer');
 const canonicalize = require('canon');
 const crypto = require('crypto-js');
@@ -97,17 +98,25 @@ function registerUser (req, res) {
       method: 'POST',
       body: bd,
       json: 'true',
-    }
+    };
 
-    request.post(options)
-      .on('response',function(response){
-        response.on('data', function(data){
-          res.send(data);
-        })
+    rp(options)
+      .then(function(response) {
+        res.send(response);
       })
-      .on('error', function(error){
+      .catch(function(error){
         res.send(error);
       });
+
+    // request.post(options)
+    //   .on('response',function(response){
+    //     response.on('data', function(data){
+    //       res.send(data);
+    //     })
+    //   })
+    //   .on('error', function(error){
+    //     res.send(error);
+    //   });
   });
 }
 
