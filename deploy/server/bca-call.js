@@ -49,13 +49,13 @@ function createHeader (data, body){
   let url = encodeURI('/ewallet/customers');
   console.log(url);
   let accessToken = data.access_token;
-  console.log(accessToken);
+  console.log('access_token : '+accessToken);
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
     bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
-    console.log(bd);
+    console.log('body-canon :'+bd);
     bd = crypto.SHA256(bd).toString();
-    console.log(bd);
+    console.log('body-sha256:'+bd);
   }
   bd.toLowerCase();
   
@@ -63,9 +63,9 @@ function createHeader (data, body){
   dt = dt.toISOString();
   console.log(dt);
   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
-  console.log(str);
+  console.log('combine :'+str);
   let hash = crypto.HmacSHA256(str, aS).toString();
-  console.log(hash);
+  console.log('signature :'+hash);
   var header = {
     'Authorization' : 'Bearer '+accessToken,
     'X-BCA-Key' : aK,
