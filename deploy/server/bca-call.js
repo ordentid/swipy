@@ -31,11 +31,11 @@ function getAccessToken () {
 
   got('https://api.finhacks.id/api/oauth/token', options)
 	.then(response => {
-		console.log(response.body);
+		console.log(response);
 		//=> '<!doctype html> ...'
 	})
 	.catch(error => {
-		console.log(error.response.body);
+		console.log(error);
 		//=> 'Internal server error ...'
 	});
 
