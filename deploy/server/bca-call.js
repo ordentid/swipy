@@ -52,7 +52,7 @@ function createHeader (data, body){
   console.log(accessToken);
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
-    bd = JSON.stringify(body).replace(/\s/g,'');
+    bd = JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
     console.log(bd);
     bd = crypto.SHA256(bd).toString();
     console.log(bd);
@@ -95,7 +95,6 @@ function registerUser (req, res) {
       url: 'https://api.finhacks.id/ewallet/customers',
       headers: header,
       method: 'POST',
-      json: 'true'
     }
 
     request.post(options).form(body)
