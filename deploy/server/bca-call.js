@@ -52,7 +52,7 @@ function createHeader (data, body){
   console.log(accessToken);
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
-    bd = JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
+    bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
     console.log(bd);
     bd = crypto.SHA256(bd).toString();
     console.log(bd);
@@ -72,7 +72,7 @@ function createHeader (data, body){
     'X-BCA-Signature' : hash,
     'X-BCA-Timestamp' : dt
   }
-
+  console.log(header);
   return header;
 }
 
