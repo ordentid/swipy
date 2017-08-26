@@ -46,16 +46,16 @@ function getAccessToken (handleData) {
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
   let url = encodeURI('/ewallet/customers');
-  console.log(url);
+  
   let accessToken = data.access_token;
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
     bd = JSON.parse(JSON.stringify(body).replace(/\s/g,''));
-    console.log(bd)
+    
     bd = crypto.SHA256(bd).toString();
   }
   bd.toLowerCase();
-  console.log(bd)
+  
   let dt = new Date();
   dt = dt.toISOString();
 
@@ -88,21 +88,22 @@ function registerUser (req, res) {
 
   getAccessToken(function(data){
     let header = createHeader(JSON.parse(data), body);
-  //   let options = {
-  //     url: 'https://api.finhacks.id/ewallet/customers',
-  //     headers: header,
-  //     method: 'POST',
-  //     json: 'true'
-  //   }
-  //   request.post(options).form(body)
-  //     .on('response',function(response){
-  //       response.on('data', function(data){
-  //         res.send(data);
-  //       })
-  //     })
-  //     .on('error', function(error){
-  //       res.send(error);
-  //     });
+    console.log(header);
+    let options = {
+      url: 'https://api.finhacks.id/ewallet/customers',
+      headers: header,
+      method: 'POST',
+      json: 'true'
+    }
+    request.post(options).form(body)
+      .on('response',function(response){
+        response.on('data', function(data){
+          res.send(data);
+        })
+      })
+      .on('error', function(error){
+        res.send(error);
+      });
   });
 }
 
