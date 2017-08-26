@@ -1,4 +1,5 @@
 const got = require('got');
+
 const request = require('request');
 const Buffer = require('Buffer');
 const canonicalize = require('canon');
@@ -48,6 +49,7 @@ function createHeader (data, body){
   let accessToken = data.access_token;
   let bd = crypto.SHA256(canonicalize.stringify(body)).toString();
   bd.toLowerCase();
+  console.log(canonicalize.stringify(body))
   let dt = new Date();
   dt = dt.toISOString();
 
@@ -66,35 +68,36 @@ function createHeader (data, body){
 }
 
 function registerUser (req, res) {
-  let body = {};
-  body.CustomerName = req.customer_name;
-  body.DateOfBirth = req.birth_date;
-  body.PrimaryID = req.primary_id;
-  body.MobileNumber = req.mobile_number;
-  body.EmailAddress = req.email_address;
-  body.IDNumber = req.id_number;
-  body.CompanyCode = companyCode;
+  console.log(req.body);
+  // let body = {};
+  // body.CustomerName = req.customer_name;
+  // body.DateOfBirth = req.birth_date;
+  // body.PrimaryID = req.primary_id;
+  // body.MobileNumber = req.mobile_number;
+  // body.EmailAddress = req.email_address;
+  // body.IDNumber = req.id_number;
+  // body.CompanyCode = companyCode;
 
-  let header = {};
+  // let header = {};
 
-  getAccessToken(function(data){
-    let header = createHeader(JSON.parse(data), body);
-    let options = {
-      url: 'https://api.finhacks.id/ewallet/customers',
-      headers: header,
-      method: 'POST',
-      json: 'true'
-    }
-    request.post(options).form(body)
-      .on('response',function(response){
-        response.on('data', function(data){
-          res.send(data);
-        })
-      })
-      .on('error', function(error){
-        res.send(error);
-      });
-  });
+  // getAccessToken(function(data){
+  //   let header = createHeader(JSON.parse(data), body);
+  //   let options = {
+  //     url: 'https://api.finhacks.id/ewallet/customers',
+  //     headers: header,
+  //     method: 'POST',
+  //     json: 'true'
+  //   }
+  //   request.post(options).form(body)
+  //     .on('response',function(response){
+  //       response.on('data', function(data){
+  //         res.send(data);
+  //       })
+  //     })
+  //     .on('error', function(error){
+  //       res.send(error);
+  //     });
+  // });
 }
 
 module.exports = {

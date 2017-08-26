@@ -1,4 +1,5 @@
 const express = require('express');
+const parser = require('body-parser');
 const app = express();
 // eslint-disable-next-line new-cap
 const server = require('http').Server(app);
@@ -26,7 +27,7 @@ function queueService (req, res) {
 function tokenPage (req, res) {
   bca.registerUser(req, res);
 }
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', indexPage);
 app.get('/io', ioPage);
 app.post('/api/register', registerService);
