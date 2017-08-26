@@ -4,12 +4,12 @@ const request = require('request');
 const Buffer = require('Buffer');
 const canonicalize = require('canon');
 const crypto = require('crypto-js');
-const companyCode = 88801;
+const companyCode = 88859;
 const Oauth = require('client-oauth2');
-const cID = '268b2069-b099-4fa2-8148-1f1c0327fe63';
-const cS = 'b383c35d-3c11-4ce6-b631-8767f4c2084b';
-const aK = '0dfb11cd-b140-40cd-b65a-220e9998a129';
-const aS = '199505e4-9d5f-4ba9-bb96-a3ea8b2f69c1';
+const cID = '69c4c406-0ebf-4458-a4ea-9ced54e02311';
+const cS = '282828c5-153a-4547-9ee5-3c43497dc0e2';
+const aK = 'e3b3f613-17ce-4997-9ce8-fec989268765';
+const aS = '18c837cb-b6d3-47cc-9f88-ab0caf2b8d9e';
 
 const auth = new Oauth({
   clientId: cID,
