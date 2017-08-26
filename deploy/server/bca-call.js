@@ -1,5 +1,5 @@
 const got = require('got');
-
+const adl = require('adler32');
 const request = require('request');
 const rp = require('request-promise');
 const Buffer = require('Buffer');
@@ -208,7 +208,7 @@ function postTopUp (req, res) {
   bd.CompanyCode = companyCode;
   bd.PrimaryID = req.params.id;
   bd.RequestDate = new Date().toISOString() + '+07:00';
-  bd.TransactionID = 'ORD-' + bd.PrimaryID + '-' + bd.RequestDate;
+  bd.TransactionID = 'ORD' + bd.PrimaryID.substring(-5) + adl.str(bd.PrimaryID+bd.RequestDate+bd.Amount);
   bd.Amount = req.body.Amount;
   bd.CurrencyCode = 'IDR';
 
