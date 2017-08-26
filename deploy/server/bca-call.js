@@ -23,7 +23,7 @@ function getAccessToken () {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
 
-  let body = new Buffer({ grant_type: 'client_credentials' });
+  let body = new Buffer([{ grant_type: 'client_credentials' }]);
   let options = {
     method: 'POST',
     url: 'https://api.finhacks.id/api/oauth/token',
