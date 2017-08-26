@@ -51,15 +51,17 @@ function createSignature (method, url, data, accessToken, timestamp){
   if (Object.keys(data).length != 0 && data.constructor === Object) {
     bd = JSON.stringify(data).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
   }
+  console.log(bd);
   bd = crypto.SHA256(bd).toString().toLowerCase();
-  
+
   let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + timestamp, aS).toString();
+
   return signature;
 }
 
 function createHeader(method, url, data, accessToken, timestamp){
   let t  = timestamp + '+07:00';
-  let signature = createSignature(method, url, data, accessToken, timestamp);
+  let signature = createSignature(method, url, data, accessToken, t);
   let header = {
     'Authorization': 'Bearer ' + accessToken,
     'X-BCA-Key': aK,
@@ -111,7 +113,7 @@ function registerUser (req, res) {
   bd.EmailAddress = req.body.email_address;
   bd.IDNumber = req.body.id_number;
   bd.CompanyCode = companyCode;
-  bd.CostumerNumber = "1111111112";
+  bd.CustomerNumber = "1111111112";
   let header = {};
 
   getAccessToken(function(data){
