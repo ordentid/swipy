@@ -224,6 +224,7 @@ function postTopUp (req, res) {
       url: host + url,
       headers: header,
       method: method,
+      body: bd,
       json: true,
     };
 
