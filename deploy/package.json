@@ -14,6 +14,7 @@
     "canonical-json": "0.0.4",
     "client-oauth2": "^4.1.0",
     "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.15.4",
     "got": "^7.1.0",
     "http": "0.0.0",
