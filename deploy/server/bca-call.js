@@ -1,4 +1,6 @@
 const got = require('got');
+const request = require('request');
+const Buffer = require('Buffer');
 const crypto = require('crypto');
 const companyCode = 88801;
 const Oauth = require('client-oauth2');
@@ -12,15 +14,34 @@ const auth = new Oauth({
   accessTokenUri: 'https://api.finhacks.id/api/oauth/token',
 });
 
-function gat () {
-  return auth.credentials.getToken()
-    .then(function(response){
-      return response;
-    })
-}
 function getAccessToken () {
-  return auth.credentials.getToken();
+
+  let header = {
+    Authorization: 'Basic ' + new Buffer(cID + ':' + cS).toString('base64'),
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+  let body = { grant_type: 'client_credentials' };
+  let options = {
+    method: 'POST',
+    url: 'https://api.finhacks.id/api/oauth/token',
+    headers: header,
+    form: body
+  };
+
+  request(options, function (test) {
+    console.log(test);
+  });
+
 }
+// function gat () {
+//   return auth.credentials.getToken()
+//     .then(function(response){
+//       return response;
+//     })
+// }
+// function getAccessToken () {
+//   return auth.credentials.getToken();
+// }
 
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
@@ -66,5 +87,4 @@ function registerUser (req) {
 
 module.exports = {
   getAccessToken,
-  gat,
 };

@@ -24,11 +24,7 @@ function queueService (req, res) {
 }
 
 function tokenPage (req, res) {
-  bca.gat().then(function(result){
-    console.log(result);
-  }).catch(function(err){
-    console.log(err);
-  });
+  bca.getAccessToken();
 }
 
 app.get('/', indexPage);
