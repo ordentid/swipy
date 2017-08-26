@@ -44,7 +44,7 @@ function getAccessToken (handleData) {
 
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
-  let url = encodeURI('/ewallet/customers');
+  let url = encodeURI('https://api.finhacks.id/ewallet/customers');
   let accessToken = data.access_token;
   let bd = crypto.SHA256(canonicalize.stringify(body)).toString();
   bd.toLowerCase();
@@ -80,7 +80,7 @@ function registerUser (req, res) {
   getAccessToken(function(data){
     let header = createHeader(JSON.parse(data), body);
     let options = {
-      url: '/ewallet/customers',
+      url: 'https://api.finhacks.id/ewallet/customers',
       headers: header,
       method: 'POST',
       json: 'true'
@@ -90,7 +90,7 @@ function registerUser (req, res) {
         response.on('data', function(data){
           res.send(data);
         })
-      }),
+      })
       .on('error', function(error){
         res.send(error);
       });
