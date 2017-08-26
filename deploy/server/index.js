@@ -4,7 +4,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const swip = require('../../src/server/index.js');
-const bca = require('bca-call.js');
+const bca = require('./bca-call.js');
 // app.use(express.static(`${__dirname}/../client`));
 
 function indexPage (req, res) {
