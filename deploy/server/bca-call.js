@@ -61,7 +61,7 @@ function createHeader (data, body){
   bd.toLowerCase();
   
   let dt = new Date();
-  dt = dt.toISOString();
+  dt = dt.toISOString().slice(0, -1);
   console.log(dt);
   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
   console.log('combine :'+str);
