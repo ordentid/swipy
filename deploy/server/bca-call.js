@@ -45,7 +45,7 @@ function getAccessToken (handleData) {
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
   let url = encodeURI('/ewallet/customers');
-  let accessToken = data.accessToken;
+  let accessToken = data.access_token;
   let bd = crypto.SHA256(canonicalize.stringify(body)).toString();
   bd.toLowerCase();
   let dt = new Date();
@@ -79,8 +79,8 @@ function registerUser (req, res) {
 
   getAccessToken(function(data){
     let header = createHeader(data, body);
-    res.send(data);
-    // res.send(header);
+    // res.send(data);
+    res.send(header);
   });
 }
 
