@@ -78,7 +78,7 @@ function registerUser (req, res) {
   let header = {};
 
   getAccessToken(function(data){
-    res.send(data.access_token);    
+    res.send(JSON.parse(data));    
     let header = createHeader(data, body);
     // res.send(header);
   });
