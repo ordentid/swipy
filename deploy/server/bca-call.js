@@ -79,7 +79,21 @@ function registerUser (req, res) {
 
   getAccessToken(function(data){
     let header = createHeader(JSON.parse(data), body);
-    res.send(header);
+    let options = {
+      url: '/ewallet/customers',
+      headers: header,
+      method: 'POST',
+      json: 'true'
+    }
+    request.post(options).form(body)
+      .on('response',function(response){
+        response.on('data', function(data){
+          res.send(data);
+        })
+      }),
+      .on('error', function(error){
+        res.send(error);
+      });
   });
 }
 
