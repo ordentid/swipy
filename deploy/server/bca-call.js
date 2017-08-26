@@ -31,7 +31,9 @@ function getAccessToken (res) {
   };
   request.post(options).form(body)
     .on('response', function(response) {
-      res.send(response.data);
+      response.on('data', function(data){
+        res.send(data);
+      });
     })
     .on('error', function(error) {
       console.log(error);
