@@ -24,14 +24,14 @@ function queueService (req, res) {
 }
 
 function tokenPage (req, res) {
-  bca.getAccessToken(res);
+  bca.registerUser(res);
 }
 
 app.get('/', indexPage);
 app.get('/io', ioPage);
 app.post('/api/register', registerService);
 app.post('/api/queue', queueService);
-app.get('/token', tokenPage);
+app.post('/token', tokenPage);
 // - page-register
 // - page-menu (pilih tipe transaksi)
 // - page-gesture

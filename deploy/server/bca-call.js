@@ -16,7 +16,7 @@ const auth = new Oauth({
   accessTokenUri: 'https://api.finhacks.id/api/oauth/token',
 });
 
-function getAccessToken (res) {
+function getAccessToken (handleData) {
 
   let header = {
     Authorization: 'Basic ' + new Buffer(cID + ':' + cS).toString('base64'),
@@ -29,25 +29,18 @@ function getAccessToken (res) {
     url: 'https://api.finhacks.id/api/oauth/token',
     headers: header,
   };
+
   request.post(options).form(body)
     .on('response', function(response) {
       response.on('data', function(data){
-        res.send(data);
+        handleData(data);
       });
     })
     .on('error', function(error) {
-      console.log(error);
+      handleData(error);
     });
 }
-// function gat () {
-//   return auth.credentials.getToken()
-//     .then(function(response){
-//       return response;
-//     })
-// }
-// function getAccessToken () {
-//   return auth.credentials.getToken();
-// }
+
 
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
@@ -70,12 +63,11 @@ function createHeader (data, body){
     'X-BCA-Timestamp' : dT
   }
 
-    return header;
+  return header;
 }
 
-function registerUser (req) {
+function registerUser (req, res) {
   let body = {};
-
   body.CustomerName = req.customer_name;
   body.DateOfBirth = req.birth_date;
   body.PrimaryID = req.primary_id;
@@ -85,12 +77,13 @@ function registerUser (req) {
   body.CompanyCode = companyCode;
   let header = {};
 
-  getAccessToken()
-    .then(function (response) {
-      header = createHeader(response, body);
-    });
+  getAccessToken(function(data){
+    let header = createHeader(data, body);
+    res.send(header);
+  });
 }
 
 module.exports = {
   getAccessToken,
+  registerUser,
 };
