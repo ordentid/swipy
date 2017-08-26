@@ -50,7 +50,7 @@ function createHeader (data, body){
   let accessToken = data.access_token;
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
-    bd = JSON.parse(JSON.stringify(body));
+    bd = JSON.parse(JSON.stringify(body).replace(/\s/g,''));
     console.log(bd)
     bd = crypto.SHA256(bd).toString();
   }
