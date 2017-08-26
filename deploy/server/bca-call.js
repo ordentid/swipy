@@ -46,20 +46,20 @@ function createHeader (data, body){
   let method = 'post'.toUpperCase();
   let url = encodeURI('/ewallet/customers');
   let accessToken = data.accessToken;
-  let bd = crypto.SHA256(canonicalize.stringify(body));
-  console.log(bd);
+  let bd = crypto.SHA256(canonicalize.stringify(body)).toString();
+  bd.toLowerCase();
   let dt = new Date();
   dt = dt.toISOString();
 
   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
 
-  let hash = crypto.HmacSHA256(str, aS);
+  let hash = crypto.HmacSHA256(str, aS).toString();
 
   var header = {
     'Authorization' : 'Bearer '+accessToken,
     'X-BCA-Key' : aK,
     'X-BCA-Signature' : hash,
-    'X-BCA-Timestamp' : dT
+    'X-BCA-Timestamp' : dt
   }
 
   return header;
