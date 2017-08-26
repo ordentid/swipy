@@ -78,26 +78,28 @@ function createHeader (data, body){
 
 function registerUser (req, res) {
 
-  let body = {};
-  body.CustomerName = req.body.customer_name;
-  body.DateOfBirth = req.body.birth_date;
-  body.PrimaryID = req.body.primary_id;
-  body.MobileNumber = req.body.mobile_number;
-  body.EmailAddress = req.body.email_address;
-  body.IDNumber = req.body.id_number;
-  body.CompanyCode = companyCode;
-  body.CostumerNumber = "1111111112";
+  let bd = {};
+  bd.CustomerName = req.body.customer_name;
+  bd.DateOfBirth = req.body.birth_date;
+  bd.PrimaryID = req.body.primary_id;
+  bd.MobileNumber = req.body.mobile_number;
+  bd.EmailAddress = req.body.email_address;
+  bd.IDNumber = req.body.id_number;
+  bd.CompanyCode = companyCode;
+  bd.CostumerNumber = "1111111112";
   let header = {};
 
   getAccessToken(function(data){
-    let header = createHeader(JSON.parse(data), body);
+    let header = createHeader(JSON.parse(data), bd);
     let options = {
       url: 'https://api.finhacks.id/ewallet/customers',
       headers: header,
       method: 'POST',
+      body: bd,
+      json: 'true',
     }
 
-    request.post(options).form(body)
+    request.post(options)
       .on('response',function(response){
         response.on('data', function(data){
           res.send(data);
