@@ -45,23 +45,27 @@ function getAccessToken (handleData) {
 
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
+  console.log(method);
   let url = encodeURI('/ewallet/customers');
-  
+  console.log(url);
   let accessToken = data.access_token;
+  console.log(accessToken);
   let bd = "";
   if(Object.keys(body).length != 0 && body.constructor === Object){
     bd = JSON.stringify(body).replace(/\s/g,'');
+    console.log(bd);
     bd = crypto.SHA256(bd).toString();
+    console.log(bd);
   }
   bd.toLowerCase();
   
   let dt = new Date();
   dt = dt.toISOString();
-
+  console.log(dt);
   let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
-
+  console.log(str);
   let hash = crypto.HmacSHA256(str, aS).toString();
-
+  console.log(hash);
   var header = {
     'Authorization' : 'Bearer '+accessToken,
     'X-BCA-Key' : aK,
@@ -82,18 +86,18 @@ function registerUser (req, res) {
   body.EmailAddress = req.body.email_address;
   body.IDNumber = req.body.id_number;
   body.CompanyCode = companyCode;
-
+  body.CostumerNumber = "1111111112";
   let header = {};
 
   getAccessToken(function(data){
     let header = createHeader(JSON.parse(data), body);
-    console.log(header);
     let options = {
       url: 'https://api.finhacks.id/ewallet/customers',
       headers: header,
       method: 'POST',
       json: 'true'
     }
+
     request.post(options).form(body)
       .on('response',function(response){
         response.on('data', function(data){
