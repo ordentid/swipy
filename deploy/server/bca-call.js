@@ -45,11 +45,16 @@ function getAccessToken (handleData) {
 
 function createHeader (data, body){
   let method = 'post'.toUpperCase();
-  let url = encodeURI('https://api.finhacks.id/ewallet/customers');
+  let url = encodeURI('/ewallet/customers');
+  console.log(url);
   let accessToken = data.access_token;
-  let bd = crypto.SHA256(canonicalize.stringify(body)).toString();
+  let bd = "";
+  if(Object.keys(body).length != 0 && body.constructor === Object){
+    bd = JSON.stringify(body);
+    bd = crypto.SHA256(bd).toString()l
+  }
   bd.toLowerCase();
-  console.log(canonicalize.stringify(body))
+  console.log(bd)
   let dt = new Date();
   dt = dt.toISOString();
 
@@ -68,20 +73,20 @@ function createHeader (data, body){
 }
 
 function registerUser (req, res) {
-  console.log(req.body);
-  // let body = {};
-  // body.CustomerName = req.customer_name;
-  // body.DateOfBirth = req.birth_date;
-  // body.PrimaryID = req.primary_id;
-  // body.MobileNumber = req.mobile_number;
-  // body.EmailAddress = req.email_address;
-  // body.IDNumber = req.id_number;
-  // body.CompanyCode = companyCode;
 
-  // let header = {};
+  let body = {};
+  body.CustomerName = req.customer_name;
+  body.DateOfBirth = req.birth_date;
+  body.PrimaryID = req.primary_id;
+  body.MobileNumber = req.mobile_number;
+  body.EmailAddress = req.email_address;
+  body.IDNumber = req.id_number;
+  body.CompanyCode = companyCode;
 
-  // getAccessToken(function(data){
-  //   let header = createHeader(JSON.parse(data), body);
+  let header = {};
+
+  getAccessToken(function(data){
+    let header = createHeader(JSON.parse(data), body);
   //   let options = {
   //     url: 'https://api.finhacks.id/ewallet/customers',
   //     headers: header,
@@ -97,7 +102,7 @@ function registerUser (req, res) {
   //     .on('error', function(error){
   //       res.send(error);
   //     });
-  // });
+  });
 }
 
 module.exports = {

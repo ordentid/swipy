@@ -27,7 +27,7 @@ function queueService (req, res) {
 function tokenPage (req, res) {
   bca.registerUser(req, res);
 }
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(parser.urlencoded({ extended: true }));
 app.get('/', indexPage);
 app.get('/io', ioPage);
 app.post('/api/register', registerService);
