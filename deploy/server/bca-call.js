@@ -28,9 +28,15 @@ function getAccessToken () {
     form: body
   };
 
-  request(options, function (test) {
-    console.log(test);
-  });
+  got('https://api.finhacks.id/api/oauth/token', options)
+	.then(response => {
+		console.log(response.body);
+		//=> '<!doctype html> ...'
+	})
+	.catch(error => {
+		console.log(error.response.body);
+		//=> 'Internal server error ...'
+	});
 
 }
 // function gat () {
