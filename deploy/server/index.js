@@ -24,6 +24,10 @@ function getUserService (req, res) {
   bca.getUser(req, res);
 }
 
+function updateUserService (req, res) {
+  bca.updateUser(req, res);
+}
+
 function queueService (req, res) {
   console.log(res);
 }
@@ -40,6 +44,7 @@ app.get('/', indexPage);
 app.get('/io', ioPage);
 app.post('/api/register', registerService);
 app.get('/api/users/:id', getUserService);
+app.post('/api/users/:id', updateUserService);
 app.post('/api/queue', queueService);
 app.post('/token', tokenPage);
 // app.get('/test-signature', function(req, res){

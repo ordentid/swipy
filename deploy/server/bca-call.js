@@ -48,10 +48,9 @@ function createSignature (method, url, data, accessToken, timestamp) {
   let u = encodeURI(url);
   let a = accessToken;
   let bd = "";
-  if (Object.keys(data).length != 0 && data.constructor === Object) {
+  if (Object.keys(data).length != 0 && data.constructor === Object && method != "GET") {
     bd = JSON.stringify(data).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,'');
   }
-  console.log(bd);
   bd = crypto.SHA256(bd).toString().toLowerCase();
 
   let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + timestamp, aS).toString();
@@ -141,15 +140,48 @@ function registerUser (req, res) {
   });
 }
 
+function updateUser (req, res) {
+  let bd = {};
+  bd.CustomerName = req.body.customer_name;
+  bd.DateOfBirth = req.body.birth_date;
+  bd.MobileNumber = req.body.mobile_number;
+  bd.EmailAddress = req.body.email_address;
+  bd.CompanyCode = companyCode;
+  bd.WalletStatus = 'ACTIVE';
+
+  getAccessToken(function(data){
+    let method = 'PUT';
+    let host = 'https://api.finhacks.id';
+    let url = '/ewallet/customers/' + companyCode + '/' + req.params.id;
+    let access_token = JSON.parse(data).access_token;
+    let timestamp = new Date().toISOString();
+    let header = createHeader(method, url, bd, access_token, timestamp);
+
+    let options = {
+      url: host + url,
+      headers: header,
+      method: method,
+      body: bd,
+      json: true,
+    };
+
+    rp(options)
+      .then(function (response) {
+        res.send(response);
+      })
+      .catch(function (error) {
+        res.send(error);
+      });
+  });
+}
+
 function getUser (req, res) {
   let bd = {};
-  bd.CompanyCode = 88859;
-  bd.PrimaryID = req.params.id;
   
   getAccessToken(function (data) {
     let method = 'GET';
     let host = 'https://api.finhacks.id';
-    let url = '/ewallet/customers/' + bd.CompanyCode + '/' + bd.PrimaryID;
+    let url = '/ewallet/customers/' + companyCode + '/' + req.params.id;
     let access_token = JSON.parse(data).access_token;
     let timestamp = new Date().toISOString();
     let header = createHeader(method, url, bd, access_token, timestamp);
@@ -205,4 +237,5 @@ module.exports = {
   getAccessToken,
   registerUser,
   getUser,
+  updateUser,
 };
