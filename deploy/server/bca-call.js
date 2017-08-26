@@ -53,11 +53,12 @@ function createSignature (method, url, data, accessToken, timestamp){
   }
   bd = crypto.SHA256(bd).toString().toLowerCase();
   
-  let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + dt).toString();
+  let signature = crypto.HmacSHA256(m + ':' + u + ':' + a + ':' + bd + ':' + timestamp, aS).toString();
+  return signature;
 }
 
 function createHeader(method, url, data, accessToken, timestamp){
-  let t  = timestamp.slice(0, -1) + '+07:00';
+  let t  = timestamp. + '+07:00';
   let signature = this.createSignature(method, url, data, accessToken, timestamp);
   let header = {
     'Authorization': 'Bearer ' + accessToken,
@@ -125,7 +126,7 @@ function registerUser (req, res) {
       url: host + url,
       headers: header,
       method: method,
-      body: bd,
+      body: JSON.stringify(bd),
       json: true,
     };
 
