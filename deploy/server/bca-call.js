@@ -8,6 +8,7 @@ const cID = '268b2069-b099-4fa2-8148-1f1c0327fe63';
 const cS = 'b383c35d-3c11-4ce6-b631-8767f4c2084b';
 const aK = '0dfb11cd-b140-40cd-b65a-220e9998a129';
 const aS = '199505e4-9d5f-4ba9-bb96-a3ea8b2f69c1';
+
 const auth = new Oauth({
   clientId: cID,
   clientSecret: cS,
@@ -25,7 +26,7 @@ function getAccessToken () {
     method: 'POST',
     url: 'https://api.finhacks.id/api/oauth/token',
     headers: header,
-    form: body
+    body: body
   };
 
   got('https://api.finhacks.id/api/oauth/token', options)
