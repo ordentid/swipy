@@ -120,7 +120,39 @@ function registerUser (req, res) {
   });
 }
 
+function solveSignature(res){
+  let method = 'POST'.toUpperCase();
+  let url = encodeURI('/banking/corporates/transfers');
+  let access_token = 'lIWOt2p29grUo59bedBUrBY3pnzqQX544LzYPohcGHOuwn8AUEdUKS';
+  let body = 
+  { 
+      "CorporateID" : "BCAAPI2016",
+      "SourceAccountNumber" : "0201245680",
+      "TransactionID" : "00000001",
+      "TransactionDate" : "2016-01-30",
+      "ReferenceID" : "12345/PO/2016",
+      "CurrencyCode" : "IDR",
+      "Amount" : "100000.00",
+      "BeneficiaryAccountNumber" : "0201245681",
+      "Remark1" : "Transfer Test",
+      "Remark2" : "Online Transfer"
+  };
+  let dt = '2016-02-03T10:00:00.000+07:00';
+  let apiSecret = '22a2d25e-765d-41e1-8d29-da68dcb5698b';
+
+  let bd = JSON.parse(JSON.stringify(body).replace(/\s/g,'').replace(/\r/g,'').replace(/\n/g,'').replace(/\t/g,''));
+
+  bd = crypto.SHA256(bd).toString();
+
+  let str = method + ':' + url + ':' + accessToken + ':' + bd + ':' + dt;
+
+  let hash = crypto.HmacSHA256(str, apiSecret).toString();
+
+  res.send(hash);
+}
+
 module.exports = {
   getAccessToken,
   registerUser,
+  solveSignature,
 };

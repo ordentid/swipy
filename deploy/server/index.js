@@ -33,6 +33,9 @@ app.get('/io', ioPage);
 app.post('/api/register', registerService);
 app.post('/api/queue', queueService);
 app.post('/token', tokenPage);
+app.get('/test-signature', function(req, res){
+  bca.solveSignature(res);
+});
 // - page-register
 // - page-menu (pilih tipe transaksi)
 // - page-gesture
