@@ -206,7 +206,7 @@ function getUser (req, res) {
 function postTopUp (req, res) {
   let bd = {};
   bd.CompanyCode = companyCode;
-  bd.PrimaryID = res.params.id;
+  bd.PrimaryID = req.params.id;
   bd.RequestDate = new Date().toISOString() + '+07:00';
   bd.TransactionID = 'ORD-' + bd.PrimaryID + '-' + bd.RequestDate;
   bd.Amount = req.body.Amount;
