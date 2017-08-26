@@ -16,7 +16,7 @@ const auth = new Oauth({
   accessTokenUri: 'https://api.finhacks.id/api/oauth/token',
 });
 
-function getAccessToken () {
+function getAccessToken (res) {
 
   let header = {
     Authorization: 'Basic ' + new Buffer(cID + ':' + cS).toString('base64'),
@@ -31,7 +31,7 @@ function getAccessToken () {
   };
   request.post(options).form(body)
     .on('response', function(response) {
-      console.log(response.body);
+      res.send(response);
     })
     .on('error', function(error) {
       console.log(error);

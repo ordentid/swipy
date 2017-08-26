@@ -24,7 +24,7 @@ function queueService (req, res) {
 }
 
 function tokenPage (req, res) {
-  bca.getAccessToken();
+  bca.getAccessToken(res);
 }
 
 app.get('/', indexPage);
