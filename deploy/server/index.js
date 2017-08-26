@@ -24,7 +24,7 @@ function queueService (req, res) {
 }
 
 function tokenPage (req, res) {
-  bca.registerUser(res);
+  bca.registerUser(req, res);
 }
 
 app.get('/', indexPage);
