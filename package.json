@@ -12,7 +12,9 @@
     "golf": "node examples/golf/server/index.js",
     "golf:dev": "nodemon examples/golf/server/index.js",
     "contact": "node examples/contact-share/server/index.js",
-    "contact:dev": "nodemon examples/contact-share/server/index.js"
+    "contact:dev": "nodemon examples/contact-share/server/index.js",
+    "deploy" : "node deploy/server/index.js",
+    "deploy:dev" : "nodemon deploy/server/index.js"
   },
   "repository": {
     "type": "git",
