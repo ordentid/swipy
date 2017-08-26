@@ -9,7 +9,7 @@ const aS = '199505e4-9d5f-4ba9-bb96-a3ea8b2f69c1';
 const auth = new Oauth({
   clientId: cID,
   clientSecret: cS,
-  accessTokenUri: 'https://api.finhacks.id//api/oauth/token',
+  accessTokenUri: 'https://api.finhacks.id/api/oauth/token',
 });
 
 function gat () {

@@ -25,7 +25,9 @@ function queueService (req, res) {
 
 function tokenPage (req, res) {
   bca.gat().then(function(result){
-    res.send(result);
+    console.log(result);
+  }).catch(function(err){
+    console.log(err);
   });
 }
 
