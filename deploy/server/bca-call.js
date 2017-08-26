@@ -20,27 +20,22 @@ function getAccessToken () {
 
   let header = {
     Authorization: 'Basic ' + new Buffer(cID + ':' + cS).toString('base64'),
-    'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  let body = new Buffer([{ grant_type: 'client_credentials' }]);
+  let body = { grant_type: 'client_credentials' };
   let options = {
     method: 'POST',
     url: 'https://api.finhacks.id/api/oauth/token',
     headers: header,
-    body: body
   };
-
-  got('https://api.finhacks.id/api/oauth/token', options)
-	.then(response => {
-		console.log(response);
-		//=> '<!doctype html> ...'
-	})
-	.catch(error => {
-		console.log(error);
-		//=> 'Internal server error ...'
-	});
-
+  request.post(options).form(body)
+    .on('response', function(response) {
+      console.log(response);
+    })
+    .on('error', function(error) {
+      console.log(error);
+    });
 }
 // function gat () {
 //   return auth.credentials.getToken()
