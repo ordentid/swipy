@@ -30,8 +30,8 @@ function getAccessToken (res) {
     headers: header,
   };
   request.post(options).form(body)
-    .on('body', function(body) {
-      res.send(body);
+    .on('body', function(bd) {
+      res.send(bd);
     })
     .on('error', function(error) {
       console.log(error);
